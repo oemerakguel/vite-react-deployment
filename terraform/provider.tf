@@ -7,10 +7,9 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "${env.TF_STATE_BUCKET}"
+    bucket         = "terraform-vite-app-state-12345"
     key            = "terraform.tfstate"
     region         = "${env.AWS_REGION}"
-    dynamodb_table = "${env.TF_LOCK_TABLE}"
   }
 }
 
