@@ -9,7 +9,7 @@ terraform {
   backend "s3" {
     bucket         = "terraform-vite-app-state-12345"
     key            = "terraform.tfstate"
-    region         = "${env.AWS_REGION}"
+    region         = "eu-central-1"
   }
 }
 
