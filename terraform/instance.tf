@@ -16,7 +16,7 @@ resource "aws_instance" "web" {
               apt update -y
               apt install -y nginx
               mkdir -p /var/www/html
-              chown -R www-data:www-data /var/www/html
+              chown -R ubuntu:ubuntu /var/www/html
               systemctl enable nginx
               systemctl start nginx
               echo "<h1>Deployment bereit!</h1>" > /var/www/html/index.html
