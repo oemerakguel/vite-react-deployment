@@ -14,8 +14,9 @@ variable "aws_token" {
 }
 
 variable "aws_region" {
-  type    = string
-  default = "eu-central-1"
+  type        = string
+  description = "AWS region to deploy to"
+  default     = "eu-central-1"
 }
 
 variable "tf_state_bucket" {

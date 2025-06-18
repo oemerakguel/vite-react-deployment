@@ -7,17 +7,14 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = var.tf_state_bucket
+    bucket         = "${env.TF_STATE_BUCKET}"
     key            = "terraform.tfstate"
-    region         = var.aws_region
-    dynamodb_table = "terraform-lock-table"
-    encrypt        = true
+    region         = "${env.AWS_REGION}"
+    dynamodb_table = "${env.TF_LOCK_TABLE}"
   }
 }
 
 provider "aws" {
-  region                  = var.aws_region
-  access_key              = var.aws_access_key
-  secret_key              = var.aws_secret_key
-  token                   = var.aws_token
+  region = var.aws_region
 }
+
