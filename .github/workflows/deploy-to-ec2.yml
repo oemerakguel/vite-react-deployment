@@ -66,9 +66,15 @@ jobs:
         id: ec2ip
         run: echo "ip=$(terraform output -raw instance_public_ip)" >> "$GITHUB_OUTPUT"
 
+    outputs:
+      instance_ip: ${{ steps.ec2ip.outputs.ip }}
+
   app_deploy:
     needs: infra_provision
     runs-on: ubuntu-latest
+    env:
+      INSTANCE_IP: ${{ needs.infra_provision.outputs.instance_ip }}
+      SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -79,17 +85,11 @@ jobs:
           name: react-dist
           path: dist/
 
-      - name: Fetch EC2 IP from Terraform
-        run: |
-          echo "INSTANCE_IP=$(terraform -chdir=terraform output -raw instance_public_ip)" >> $GITHUB_ENV
-
       - name: Deploy app via SCP
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           scp -o StrictHostKeyChecking=no -i private_key.pem -r dist/* ubuntu@${{ env.INSTANCE_IP }}:/var/www/html/
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
 
       - name: Restart Nginx
         run: |
